@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Slot {
+  id        String   @id @default(uuid())
+  name      String?
+  place     String?   
+  number    String? 
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content String
+  createdAt DateTime @default(now())
+}
+
+model CsvData {
+  id          String   @id @default(uuid())
+  phoneNumber String
+  name        String?
+  processed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Campaign {
+  id            String         @id @default(cuid())
+  name          String        @unique
+  status        String        @default("DRAFT") // DRAFT, ACTIVE, PAUSED, COMPLETED
+  script        String?       // AI conversation script
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  leads         Lead[]
+  conversations Conversation[]
+}
+
+model Lead {
+  id            String         @id @default(cuid())
+  phoneNumber   String
+  name          String?
+  email         String?
+  status        String        @default("PENDING") // PENDING, PROCESSED, FAILED, NO_ANSWER, VOICEMAIL, HUNG_UP, COMPLETED, WAITING_AGENT
+  errorReason   String?
+  campaign      Campaign      @relation(fields: [campaignId], references: [id])
+  campaignId    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  conversations Conversation[]
+
+  @@index([campaignId])
+}
+
+model Conversation {
+  id            String    @id @default(cuid())
+  lead          Lead      @relation(fields: [leadId], references: [id])
+  leadId        String
+  campaign      Campaign  @relation(fields: [campaignId], references: [id])
+  campaignId    String
+  status        String    @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, FAILED, NO_ANSWER, VOICEMAIL, HUNG_UP, WAITING_AGENT
+  callStartTime DateTime?
+  callEndTime   DateTime?
+  duration      Int?      // Duration in seconds
+  results       Json?     // Structured results from the conversation
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([campaignId])
+}

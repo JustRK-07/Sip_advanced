@@ -1,0 +1,8 @@
+livekit==1.0.8
+livekit-api==1.0.2
+livekit-agents==1.0.23
+livekit-plugins-openai==1.0.23
+livekit-protocol==1.0.3
+aiohttp>=3.9.0
+python-dotenv>=1.0.1
+openai>=1.0.0
