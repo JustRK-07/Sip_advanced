@@ -156,9 +156,6 @@ export function CallMonitorPopup({
         }, 2000);
 
         // TODO: Real LiveKit connection implementation
-        // const tokenData = await getListenTokenMutation.mutateAsync({ callId });
-        // const room = new Room();
-        // await room.connect(tokenData.livekitUrl, tokenData.token);
 
         // For production, add hang-up detection:
         /*

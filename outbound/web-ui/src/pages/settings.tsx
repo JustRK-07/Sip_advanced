@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { AiOutlineTool, AiOutlineApi, AiOutlineEnvironment, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineCopy, AiOutlineCheck, AiOutlineRobot } from "react-icons/ai";
+import { AiOutlineApi, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineCopy, AiOutlineCheck, AiOutlineRobot } from "react-icons/ai";
 import { Layout } from "@/components/Layout";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
