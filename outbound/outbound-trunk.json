@@ -1,0 +1,9 @@
+{
+    "trunk": {
+      "name": "Outbound campaign agent",
+      "address": "outbound-campaign-agent.pstn.twilio.com",
+      "numbers": ["+19033267692"],
+      "authUsername": "YOUR_TWILIO_ACCOUNT_SID",
+      "authPassword": "YOUR_TWILIO_AUTH_TOKEN"
+    }
+  }

@@ -48,18 +48,11 @@ async function makeTwilioCall(to: string, from: string, roomName: string) {
   console.log(`Making real Twilio call: ${from} -> ${to} (room: ${roomName})`);
   
   try {
-    // Create TwiML to connect to LiveKit room
-    const twiml = new twilio.twiml.VoiceResponse();
-    const dial = twiml.dial();
-    
-    // Connect to LiveKit SIP room
-    dial.sip(`sip:${roomName}@sip.livekit.cloud`);
-    
-    // Create a real Twilio call with the TwiML
+    // Create a simple Twilio call with basic TwiML (bypass SIP for now)
     const call = await client.calls.create({
       to: to,
       from: from,
-      twiml: twiml.toString(),
+      twiml: `<Response><Say>Hello! This is a test call from your AI agent. The call is working correctly.</Say><Pause length="2"/><Say>Thank you for testing the system. Goodbye!</Say></Response>`,
     });
     
     console.log(`Real Twilio call created: ${call.sid}`);
@@ -788,23 +781,18 @@ export const campaignRouter = createTRPCRouter({
           // Use Twilio for real calls
           console.log(`Making real call to ${input.phoneNumber} using Twilio`);
           
-          // Create SIP participant in LiveKit room first
-          sipParticipant = await sipClient.createSipParticipant(
-            env.LIVEKIT_SIP_TRUNK_ID,
-            input.phoneNumber,
-            roomName,
-            {
-              participantIdentity: input.phoneNumber,
-              participantName: "Phone Caller",
-              playRingtone: true,
-            }
-          );
-          
-          console.log("LiveKit SIP participant created:", sipParticipant);
-          
-          // Now make the actual Twilio call
+          // Make the actual Twilio call directly (bypass SIP trunk for now)
           const twilioCall = await makeTwilioCall(input.phoneNumber, env.TWILIO_PHONE_NUMBER, roomName);
           console.log("Twilio call initiated:", twilioCall);
+          
+          // Update lead status to indicate call was made
+          await ctx.prisma.lead.update({
+            where: { id: lead.id },
+            data: { 
+              status: "PROCESSED",
+              errorReason: null
+            }
+          });
           
         } else {
           // Use LiveKit SIP directly (for testing)
