@@ -37,12 +37,21 @@ model CsvData {
 model Campaign {
   id            String         @id @default(cuid())
   name          String        @unique
+  description   String?
   status        String        @default("DRAFT") // DRAFT, ACTIVE, PAUSED, COMPLETED
   script        String?       // AI conversation script
+  totalLeads    Int           @default(0)
+  callsMade     Int           @default(0)
+  callsAnswered Int           @default(0)
+  conversionRate Float        @default(0.0)
+  averageDuration Float       @default(0.0)
+  totalCost     Float         @default(0.0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   leads         Lead[]
   conversations Conversation[]
+  agents        CampaignAgent[]
+  analytics     CallAnalytics[]
 }
 
 model Lead {
@@ -67,13 +76,129 @@ model Conversation {
   leadId        String
   campaign      Campaign  @relation(fields: [campaignId], references: [id])
   campaignId    String
+  agent         Agent?    @relation(fields: [agentId], references: [id])
+  agentId       String?
   status        String    @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, FAILED, NO_ANSWER, VOICEMAIL, HUNG_UP, WAITING_AGENT
   callStartTime DateTime?
   callEndTime   DateTime?
   duration      Int?      // Duration in seconds
   results       Json?     // Structured results from the conversation
+  transcript    String?   // Full conversation transcript
+  sentiment     String?   // POSITIVE, NEGATIVE, NEUTRAL
+  leadScore     Int?      // 1-100 lead quality score
+  outcome       String?   // INTERESTED, NOT_INTERESTED, CALLBACK, TRANSFERRED
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   @@index([campaignId])
+  @@index([agentId])
+}
+
+// New Models for Enhanced System
+model PhoneNumber {
+  id              String   @id @default(cuid())
+  number          String   @unique
+  friendlyName    String?
+  status          String   @default("AVAILABLE") // AVAILABLE, ASSIGNED, SUSPENDED
+  capabilities    String   // JSON string: ["voice", "sms"]
+  twilioSid       String   @unique
+  twilioAccount   String
+  country         String
+  region          String?
+  monthlyCost     Float    @default(0.0)
+  assignedAgentId String?  @unique
+  assignedAgent   Agent?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([assignedAgentId])
+}
+
+model Agent {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  description     String?
+  prompt          String   // Custom AI prompt
+  model           String   @default("gpt-4") // gpt-4, gpt-3.5-turbo, etc.
+  voice           String   @default("nova") // nova, alloy, echo, fable, onyx, shimmer
+  temperature     Float    @default(0.7)
+  maxTokens       Int      @default(1000)
+  status          String   @default("INACTIVE") // ACTIVE, INACTIVE, ERROR, DEPLOYING
+  phoneNumberId   String?  @unique
+  phoneNumber     PhoneNumber? @relation(fields: [phoneNumberId], references: [id])
+  livekitConfig   Json?    // Auto-generated LiveKit configuration
+  twilioConfig    Json?    // Auto-generated Twilio configuration
+  performance     Json?    // Performance metrics
+  totalCalls      Int      @default(0)
+  successfulCalls Int      @default(0)
+  conversionRate  Float    @default(0.0)
+  averageDuration Float    @default(0.0)
+  campaigns       CampaignAgent[]
+  conversations   Conversation[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([phoneNumberId])
+}
+
+model CampaignAgent {
+  id          String   @id @default(cuid())
+  campaignId  String
+  agentId     String
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
+  agent       Agent    @relation(fields: [agentId], references: [id])
+  isActive    Boolean  @default(true)
+  priority    Int      @default(1) // 1 = highest priority
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([campaignId, agentId])
+  @@index([campaignId])
+  @@index([agentId])
+}
+
+model CallAnalytics {
+  id                String   @id @default(cuid())
+  campaignId        String
+  campaign          Campaign @relation(fields: [campaignId], references: [id])
+  agentId           String?
+  leadId            String
+  phoneNumber       String
+  callStartTime     DateTime
+  callEndTime       DateTime?
+  duration          Int?     // seconds
+  status            String   // ANSWERED, NO_ANSWER, BUSY, VOICEMAIL, HUNG_UP, FAILED
+  outcome           String?  // INTERESTED, NOT_INTERESTED, CALLBACK, TRANSFERRED
+  transcript        String?  // Full conversation transcript
+  sentiment         String?  // POSITIVE, NEGATIVE, NEUTRAL
+  keywords          String   // JSON string: ["keyword1", "keyword2"]
+  leadScore         Int?     // 1-100 lead quality score
+  agentPerformance  Json?    // Agent-specific metrics
+  cost              Float    @default(0.0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([agentId])
+  @@index([callStartTime])
+}
+
+model SystemMetrics {
+  id                String   @id @default(cuid())
+  date              DateTime @unique
+  totalCalls        Int      @default(0)
+  answeredCalls     Int      @default(0)
+  conversionRate    Float    @default(0.0)
+  averageDuration   Float    @default(0.0)
+  totalCost         Float    @default(0.0)
+  activeAgents      Int      @default(0)
+  activeCampaigns   Int      @default(0)
+  systemUptime      Float    @default(100.0)
+  errorRate         Float    @default(0.0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([date])
 }

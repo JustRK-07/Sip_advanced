@@ -5,6 +5,8 @@ import { csvRouter } from "@/server/api/routers/csv";
 import { campaignRouter } from "@/server/api/routers/campaign";
 import { settingsRouter } from "@/server/api/routers/settings";
 import { twilioRouter } from "@/server/api/routers/twilio";
+import { numbersRouter } from "@/server/api/routers/numbers";
+import { agentsRouter } from "@/server/api/routers/agents";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +20,8 @@ export const appRouter = createTRPCRouter({
   campaign: campaignRouter,
   settings: settingsRouter,
   twilio: twilioRouter,
+  numbers: numbersRouter,
+  agents: agentsRouter,
 });
 
 // export type definition of API

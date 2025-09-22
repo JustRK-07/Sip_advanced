@@ -1208,4 +1208,109 @@ export const campaignRouter = createTRPCRouter({
       };
     }
   }),
+
+  // Start AI agent
+  startAgent: publicProcedure.mutation(async ({ ctx }) => {
+    try {
+      // In a real implementation, this would start the Python agent process
+      // For now, we'll simulate starting the agent by creating a status file
+      const fs = await import('fs').then(m => m.promises);
+      const statusFile = '/tmp/livekit_agent_status.json';
+      
+      const agentStatus = {
+        worker_id: `AW_${Date.now()}`,
+        status: 'starting',
+        started_at: new Date().toISOString(),
+        message: 'AI Agent is starting up...'
+      };
+      
+      await fs.writeFile(statusFile, JSON.stringify(agentStatus, null, 2));
+      
+      // In a real implementation, you would:
+      // 1. Start the Python agent process
+      // 2. Monitor its health
+      // 3. Update the status file with real status
+      
+      return {
+        success: true,
+        message: "AI Agent start command sent",
+        agentId: agentStatus.worker_id
+      };
+    } catch (error) {
+      console.error("Error starting agent:", error);
+      throw new Error("Failed to start AI agent");
+    }
+  }),
+
+  // Stop AI agent
+  stopAgent: publicProcedure.mutation(async ({ ctx }) => {
+    try {
+      // In a real implementation, this would stop the Python agent process
+      const fs = await import('fs').then(m => m.promises);
+      const statusFile = '/tmp/livekit_agent_status.json';
+      
+      const agentStatus = {
+        worker_id: null,
+        status: 'stopped',
+        stopped_at: new Date().toISOString(),
+        message: 'AI Agent has been stopped'
+      };
+      
+      await fs.writeFile(statusFile, JSON.stringify(agentStatus, null, 2));
+      
+      // In a real implementation, you would:
+      // 1. Send a stop signal to the Python agent process
+      // 2. Wait for graceful shutdown
+      // 3. Kill the process if necessary
+      
+      return {
+        success: true,
+        message: "AI Agent stop command sent"
+      };
+    } catch (error) {
+      console.error("Error stopping agent:", error);
+      throw new Error("Failed to stop AI agent");
+    }
+  }),
+
+  // Restart AI agent
+  restartAgent: publicProcedure.mutation(async ({ ctx }) => {
+    try {
+      // First stop the agent
+      const fs = await import('fs').then(m => m.promises);
+      const statusFile = '/tmp/livekit_agent_status.json';
+      
+      // Stop status
+      const stopStatus = {
+        worker_id: null,
+        status: 'restarting',
+        stopped_at: new Date().toISOString(),
+        message: 'AI Agent is restarting...'
+      };
+      
+      await fs.writeFile(statusFile, JSON.stringify(stopStatus, null, 2));
+      
+      // Wait a moment (in real implementation, wait for actual stop)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Start status
+      const startStatus = {
+        worker_id: `AW_${Date.now()}`,
+        status: 'starting',
+        started_at: new Date().toISOString(),
+        message: 'AI Agent is starting up after restart...'
+      };
+      
+      await fs.writeFile(statusFile, JSON.stringify(startStatus, null, 2));
+      
+      return {
+        success: true,
+        message: "AI Agent restart command sent",
+        agentId: startStatus.worker_id
+      };
+    } catch (error) {
+      console.error("Error restarting agent:", error);
+      throw new Error("Failed to restart AI agent");
+    }
+  }),
 }); 

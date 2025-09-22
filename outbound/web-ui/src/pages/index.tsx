@@ -2,6 +2,8 @@ import { useState } from "react";
 import Head from "next/head";
 import { api } from "@/utils/api";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   AiOutlinePhone,
   AiOutlineCheck,
@@ -13,9 +15,23 @@ import {
   AiOutlinePauseCircle,
   AiOutlineClockCircle,
   AiOutlineEdit,
+  AiOutlineShoppingCart,
+  AiOutlineEye,
 } from "react-icons/ai";
+import { 
+  Phone, 
+  Users, 
+  Activity, 
+  TrendingUp, 
+  Clock, 
+  CheckCircle, 
+  XCircle, 
+  AlertCircle,
+  Play,
+  Pause,
+  Square
+} from "lucide-react";
 import { toast } from "sonner";
-import { Navigation } from "@/components/Navigation";
 import { RealTimeDashboard } from "@/components/RealTimeDashboard";
 import { AgentStatus } from "@/components/AgentStatus";
 import Link from "next/link";
@@ -31,6 +47,9 @@ type RecentActivity = {
 
 export default function Dashboard() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<"today" | "week" | "month">("today");
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [purchaseCountry, setPurchaseCountry] = useState("US");
+  const [purchaseAreaCode, setPurchaseAreaCode] = useState("");
 
   // Fetch overall stats for dashboard
   const { data: overallStats } = api.campaign.getOverallStats.useQuery(
@@ -44,12 +63,46 @@ export default function Dashboard() {
   // Fetch campaigns for quick management
   const { data: campaigns } = api.campaign.getAll.useQuery();
 
+  // Fetch numbers stats and data
+  const { data: numbersStats } = api.numbers.getStats.useQuery();
+  const { data: numbers } = api.numbers.getAll.useQuery();
+
+  // Fetch agents stats and data
+  const { data: agentsStats } = api.agents.getStats.useQuery();
+  const { data: agents } = api.agents.getAll.useQuery();
+
   // Mutations for quick actions
   const { mutate: updateStatus } = api.campaign.updateStatus.useMutation({
     onSuccess: () => {
       toast.success("Campaign status updated!");
     },
   });
+
+  // Twilio number purchase mutation
+  const { mutate: purchaseNumber, isLoading: isPurchasing } = api.numbers.purchase.useMutation({
+    onSuccess: () => {
+      toast.success("Phone number purchased successfully!");
+      setShowPurchaseModal(false);
+      setPurchaseAreaCode("");
+    },
+    onError: (error) => {
+      toast.error(`Failed to purchase number: ${error.message}`);
+    },
+  });
+
+  const handlePurchaseNumber = () => {
+    if (!purchaseAreaCode) {
+      toast.error("Please enter an area code");
+      return;
+    }
+    // Generate a mock phone number for now - in real implementation, you'd search available numbers first
+    const mockPhoneNumber = `+1${purchaseAreaCode}${Math.floor(Math.random() * 10000000).toString().padStart(7, '0')}`;
+    purchaseNumber({
+      phoneNumber: mockPhoneNumber,
+      friendlyName: `Purchased Number ${purchaseAreaCode}`,
+      capabilities: ["voice", "sms"],
+    });
+  };
 
   // Mock recent activity data (in a real app, this would come from an API)
   const recentActivities: RecentActivity[] = [
@@ -149,7 +202,6 @@ export default function Dashboard() {
         <title>Campaign Dashboard</title>
         <meta name="description" content="Campaign Management Dashboard" />
       </Head>
-      <Navigation />
       <main className="container mx-auto p-6">
         {/* Dashboard Header */}
         <div className="mb-8">
@@ -167,6 +219,65 @@ export default function Dashboard() {
         {/* Real-time Stats Overview */}
         <div className="mb-8">
           <RealTimeDashboard />
+        </div>
+
+        {/* Comprehensive Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Total Calls */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Calls</CardTitle>
+              <Phone className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{overallStats?.totalCalls || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                +{overallStats?.completedCalls || 0} completed today
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Active Agents */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Agents</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{agentsStats?.activeAgents || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                of {agentsStats?.totalAgents || 0} total agents
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Phone Numbers */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Phone Numbers</CardTitle>
+              <Phone className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{numbersStats?.totalNumbers || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                {numbersStats?.availableNumbers || 0} available
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Conversion Rate */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{overallStats?.successRate ? (overallStats.successRate * 100).toFixed(1) : "0"}%</div>
+              <p className="text-xs text-muted-foreground">
+                +2.1% from last week
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Main Dashboard Content */}
@@ -331,6 +442,46 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* Phone Number Management */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Phone Numbers</h3>
+                <Button 
+                  size="sm" 
+                  onClick={() => setShowPurchaseModal(true)}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <AiOutlineShoppingCart className="h-4 w-4 mr-1" />
+                  Purchase
+                </Button>
+              </div>
+              
+              {/* Phone Numbers List */}
+              <div className="space-y-2 mb-4">
+                {numbers?.slice(0, 3).map((number) => (
+                  <div key={number.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <div>
+                      <p className="text-sm font-medium">{number.number}</p>
+                      <p className="text-xs text-gray-500">{number.country} • ${number.monthlyCost}/mo</p>
+                    </div>
+                    <Badge variant={number.status === "AVAILABLE" ? "default" : "secondary"}>
+                      {number.status}
+                    </Badge>
+                  </div>
+                ))}
+                {(!numbers || numbers.length === 0) && (
+                  <p className="text-sm text-gray-500 text-center py-4">No phone numbers purchased yet</p>
+                )}
+              </div>
+              
+              <Link href="/number-management">
+                <Button variant="outline" className="w-full">
+                  <AiOutlineEye className="h-4 w-4 mr-2" />
+                  View All Numbers
+                </Button>
+              </Link>
+            </div>
+
             {/* Quick Actions */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
@@ -363,6 +514,62 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Purchase Number Modal */}
+        {showPurchaseModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <h3 className="text-lg font-semibold mb-4">Purchase Phone Number</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Country
+                  </label>
+                  <select
+                    value={purchaseCountry}
+                    onChange={(e) => setPurchaseCountry(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Area Code (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={purchaseAreaCode}
+                    onChange={(e) => setPurchaseAreaCode(e.target.value)}
+                    placeholder="e.g., 555"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 mt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowPurchaseModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handlePurchaseNumber}
+                  disabled={isPurchasing}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {isPurchasing ? "Purchasing..." : "Purchase Number"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

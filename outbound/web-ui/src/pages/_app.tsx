@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
+import { Layout } from "@/components/Layout";
 
 const geist = Geist({
 	subsets: ["latin"],
@@ -27,7 +28,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 		<AuthProvider>
 		<div className={geist.className}>
 			    <Toaster position="top-right" richColors />
-			<Component {...pageProps} />
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
 		</div>
 		</AuthProvider>
 	);

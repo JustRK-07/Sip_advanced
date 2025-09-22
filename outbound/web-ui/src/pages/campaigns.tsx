@@ -24,7 +24,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Navigation } from "@/components/Navigation";
 import { ConversationDetails } from "@/components/ConversationDetails";
 import { CampaignOutcomes } from "@/components/CampaignOutcomes";
 
@@ -281,7 +280,6 @@ export default function Campaigns() {
         <title>Campaign Management</title>
         <meta name="description" content="Campaign Management" />
       </Head>
-      <Navigation />
       <main className="container mx-auto p-6">
         {/* Dashboard Toggle */}
         <div className="mb-6 flex justify-between items-center">
