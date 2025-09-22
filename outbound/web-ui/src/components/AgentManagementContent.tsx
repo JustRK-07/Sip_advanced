@@ -382,20 +382,6 @@ export default function AgentManagementContent() {
         </Card>
       </div>
 
-      {/* Agent Launch Notice */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <div className="flex items-start">
-          <Bot className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
-          <div>
-            <h3 className="text-sm font-medium text-blue-800">Agent Launch System</h3>
-            <p className="text-sm text-blue-700 mt-1">
-              Click the <strong>"Launch"</strong> button to start a Python process for your agent. 
-              This creates a real AI assistant that can handle calls through LiveKit. 
-              The agent will use your custom prompt and connect to your LiveKit room.
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Filters */}
       <Card className="mb-6">
