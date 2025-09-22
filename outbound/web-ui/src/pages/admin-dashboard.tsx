@@ -73,13 +73,13 @@ export default function AdminDashboard() {
     if (campaignStats && agentStats && numberStats) {
       setStats({
         totalCalls: campaignStats.totalCalls || 0,
-        activeCalls: campaignStats.activeCalls || 0,
+        activeCalls: campaignStats.statusDistribution?.["IN_PROGRESS"] || 0,
         totalAgents: agentStats.totalAgents || 0,
         activeAgents: agentStats.activeAgents || 0,
         totalNumbers: numberStats.totalNumbers || 0,
         availableNumbers: numberStats.availableNumbers || 0,
-        conversionRate: campaignStats.conversionRate || 0,
-        averageDuration: campaignStats.averageDuration || 0,
+        conversionRate: campaignStats.successRate || 0,
+        averageDuration: 0, // Not available in API response
       });
     }
   }, [campaignStats, agentStats, numberStats]);

@@ -28,7 +28,7 @@ export const slotsRouter = createTRPCRouter({
       try {
         const dateTime = new Date(input.date);
 
-        const slot = await ctx.db.slot.create({
+        const slot = await ctx.prisma.slot.create({
           data: {
             name: input.name,
             date: dateTime,
@@ -49,7 +49,7 @@ export const slotsRouter = createTRPCRouter({
   // ✅ Get all slots
   getAllSlots: publicProcedure.query(async ({ ctx }) => {
     try {
-      const slots = await ctx.db.slot.findMany({
+      const slots = await ctx.prisma.slot.findMany({
         orderBy: { date: "desc" },
       });
       return slots;
@@ -69,7 +69,7 @@ export const slotsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const file = await ctx.db.file.create({
+        const file = await ctx.prisma.file.create({
           data: {
             name: input.name,
             content: input.content,
@@ -91,12 +91,11 @@ export const slotsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const created = await ctx.db.slot.createMany({
+        const created = await ctx.prisma.slot.createMany({
           data: input.slots.map((s) => ({
             name: s.name,
             date: new Date(s.date),
           })),
-          skipDuplicates: true,
         });
 
         return { success: true, count: created.count };

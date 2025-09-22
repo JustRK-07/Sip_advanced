@@ -1,4 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
+// @ts-ignore
 import twilio from 'twilio';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {

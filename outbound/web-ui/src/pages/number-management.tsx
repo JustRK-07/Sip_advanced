@@ -60,18 +60,11 @@ export default function NumberManagement() {
   const { data: numbers, refetch: refetchNumbers } = api.numbers.getAll.useQuery();
   const { data: stats } = api.numbers.getStats.useQuery();
 
-  // Mutations
-  const searchNumbersMutation = api.numbers.searchAvailable.useMutation({
-    onSuccess: (data) => {
-      setAvailableNumbers(data.numbers);
-      setIsSearching(false);
-      toast.success(`Found ${data.numbers.length} available numbers`);
-    },
-    onError: (error) => {
-      setIsSearching(false);
-      toast.error(error.message);
-    },
-  });
+  // Search available numbers query
+  const { data: searchResults, refetch: searchNumbers, isFetching: isSearchingNumbers } = api.numbers.searchAvailable.useQuery(
+    { country: searchForm.country, areaCode: searchForm.areaCode, contains: searchForm.contains, limit: searchForm.limit },
+    { enabled: false } // Only run when manually triggered
+  );
 
   const syncFromTwilioMutation = api.numbers.syncFromTwilio.useMutation({
     onSuccess: (data) => {
@@ -117,9 +110,16 @@ export default function NumberManagement() {
     },
   });
 
-  const handleSearchNumbers = () => {
-    setIsSearching(true);
-    searchNumbersMutation.mutate(searchForm);
+  const handleSearchNumbers = async () => {
+    try {
+      const result = await searchNumbers();
+      if (result.data) {
+        setAvailableNumbers(result.data.numbers);
+        toast.success(`Found ${result.data.numbers.length} available numbers`);
+      }
+    } catch (error) {
+      toast.error('Failed to search numbers');
+    }
   };
 
   const handlePurchaseNumber = (number: AvailableNumber) => {
@@ -138,7 +138,7 @@ export default function NumberManagement() {
 
   const handleAssignNumber = (phoneNumberId: string) => {
     // TODO: Open agent selection dialog
-    toast.info("Agent selection dialog coming soon");
+    toast.success("Agent selection dialog coming soon");
   };
 
   const handleReleaseNumber = (phoneNumberId: string) => {
@@ -186,10 +186,10 @@ export default function NumberManagement() {
               <Button 
                 variant="outline" 
                 onClick={() => syncFromTwilioMutation.mutate()}
-                disabled={syncFromTwilioMutation.isLoading}
+                disabled={syncFromTwilioMutation.isPending}
               >
                 <Phone className="h-4 w-4 mr-2" />
-                {syncFromTwilioMutation.isLoading ? "Syncing..." : "Sync from Twilio"}
+                {syncFromTwilioMutation.isPending ? "Syncing..." : "Sync from Twilio"}
               </Button>
               <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>
                 <DialogTrigger asChild>
@@ -320,19 +320,6 @@ export default function NumberManagement() {
           </Card>
         </div>
 
-        {/* Trial Account Notice */}
-        <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <div className="flex items-start">
-            <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5 mr-3" />
-            <div>
-              <h3 className="text-sm font-medium text-yellow-800">Trial Account Limitation</h3>
-              <p className="text-sm text-yellow-700 mt-1">
-                Your Twilio account is currently on a trial plan, which allows only one phone number. 
-                To purchase additional numbers, please upgrade your Twilio account to a paid plan.
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Filters */}
         <Card className="mb-6">

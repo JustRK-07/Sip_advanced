@@ -4,7 +4,6 @@ import {
   Settings as SettingsIcon,
   Phone
 } from "lucide-react";
-import { AiOutlineSetting, AiOutlinePhone } from "react-icons/ai";
 
 // Import the existing components
 import SettingsContent from "@/components/SettingsContent";

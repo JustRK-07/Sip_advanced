@@ -19,7 +19,7 @@ export const csvRouter = createTRPCRouter({
 
         // Validate and insert records
         const insertPromises = records.map((record: any) => {
-          return ctx.db.csvData.create({
+          return ctx.prisma.csvData.create({
             data: {
               phoneNumber: record.phoneNumber || "",
               name: record.name || null,
@@ -36,7 +36,7 @@ export const csvRouter = createTRPCRouter({
     }),
 
   getAllRecords: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.csvData.findMany({
+    return ctx.prisma.csvData.findMany({
       orderBy: { createdAt: "desc" },
     });
   }),
@@ -49,7 +49,7 @@ export const csvRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.csvData.update({
+      return ctx.prisma.csvData.update({
         where: { id: input.id },
         data: { processed: input.processed },
       });

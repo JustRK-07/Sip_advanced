@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { env } from "@/env";
+// @ts-ignore
 import twilio from 'twilio';
 
 // Initialize Twilio client
@@ -102,7 +103,7 @@ export const numbersRouter = createTRPCRouter({
 
         return {
           success: true,
-          numbers: availableNumbers.map((number) => ({
+          numbers: availableNumbers.map((number: any) => ({
             phoneNumber: number.phoneNumber,
             friendlyName: number.friendlyName,
             capabilities: number.capabilities,
