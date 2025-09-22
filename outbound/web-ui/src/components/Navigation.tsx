@@ -83,24 +83,14 @@ function Navigation() {
       label: "Number Management",
     },
     {
-      href: "/agent-management",
+      href: "/agents",
       icon: AiOutlineRobot,
-      label: "Agent Management",
-    },
-    {
-      href: "/ai-agent",
-      icon: AiOutlineRobot,
-      label: "AI Agent",
+      label: "Agents",
     },
     {
       href: "/settings",
       icon: AiOutlineSetting,
       label: "Settings",
-    },
-    {
-      href: "/sip-settings",
-      icon: AiOutlinePhone,
-      label: "SIP Settings",
     },
   ];
 
