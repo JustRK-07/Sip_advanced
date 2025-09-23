@@ -36,10 +36,8 @@ function Navigation() {
     }
   }, []);
 
-  // Close sidebar when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [router.pathname]);
+  // Note: Removed automatic closing on route change
+  // Navbar will only close when user explicitly clicks close button
 
 
   // Toggle navbar-expanded class on main content
