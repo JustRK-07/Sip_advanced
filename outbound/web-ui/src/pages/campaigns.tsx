@@ -239,7 +239,7 @@ export default function Campaigns() {
       case "HUNG_UP":
         return <AiOutlineClose className="h-5 w-5 text-red-500" />;
       case "WAITING_AGENT":
-        return <AiOutlineRobot className="h-5 w-5 text-blue-500 animate-pulse" />;
+        return <AiOutlineRobot className="h-5 w-5 text-[#5bc0be] animate-pulse" />;
       default:
         return null;
     }
@@ -268,7 +268,7 @@ export default function Campaigns() {
       case "HUNG_UP":
         return "text-red-600";
       case "WAITING_AGENT":
-        return "text-blue-600";
+        return "text-[#5bc0be]";
       default:
         return "text-gray-600";
     }
@@ -280,7 +280,7 @@ export default function Campaigns() {
         <title>Campaign Management</title>
         <meta name="description" content="Campaign Management" />
       </Head>
-      <main className="container mx-auto p-6">
+      <div className="container mx-auto">
         {/* Dashboard Toggle */}
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold">Campaign Management</h1>
@@ -341,7 +341,7 @@ export default function Campaigns() {
                     <tr
                       key={campaign.id}
                       className={`border-t ${
-                        selectedCampaign === campaign.id ? "bg-blue-50" : ""
+                        selectedCampaign === campaign.id ? "bg-[#1c2541]" : ""
                       }`}
                     >
                       <td className="p-2 border">{campaign.name}</td>
@@ -643,7 +643,7 @@ export default function Campaigns() {
             conversation={selectedConversation}
           />
         )}
-      </main>
+      </div>
     </>
   );
 } 

@@ -41,30 +41,25 @@ function Navigation() {
     setIsOpen(false);
   }, [router.pathname]);
 
-  // Close sidebar when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (isOpen && !target.closest('.sidebar') && !target.closest('.hamburger')) {
-        setIsOpen(false);
-      }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+  // Toggle navbar-expanded class on main content
+  useEffect(() => {
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      if (isOpen) {
+        mainContent.classList.add('navbar-expanded');
+      } else {
+        mainContent.classList.remove('navbar-expanded');
+      }
+    }
   }, [isOpen]);
 
-  // Prevent body scroll when sidebar is open
+  // Clean up any body overflow changes on unmount
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, []);
 
   const navigationItems = [
     {
@@ -96,45 +91,38 @@ function Navigation() {
 
   return (
     <div ref={navigationRef} data-navigation="main">
-      {/* Mobile Header - Only visible on mobile */}
-      <div key="mobile-header" className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-800 to-slate-900 shadow-md border-b border-slate-700">
-        <div className="flex items-center justify-between px-4 py-3">
+      {/* Toggle Button - Fixed at top-left corner */}
+      <button
+        id="toggleBtn"
+        className="fixed top-4 left-4 z-50 p-3 bg-[#1c2541] text-[#6fffe9] rounded-lg shadow-lg hover:bg-[#3a506b] transition-colors duration-200"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle navigation menu"
+      >
+        {isOpen ? (
+          <AiOutlineClose className="h-6 w-6" />
+        ) : (
+          <AiOutlineMenu className="h-6 w-6" />
+        )}
+      </button>
+
+
+      {/* Navbar - Slides in from left */}
+      <div 
+        className={`navbar ${isOpen ? 'active' : ''}`}
+      >
+        {/* Logo/Brand */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#3a506b]">
           <div className="flex items-center">
-            <AiOutlinePhone className="h-6 w-6 text-blue-400" />
-            <span className="ml-2 text-lg font-semibold tracking-wide text-white">AI Call Center</span>
+            <AiOutlinePhone className="h-7 w-7 text-[#5bc0be]" />
+            <span className="ml-2 text-lg font-semibold tracking-wide text-[#6fffe9]">AI Call Center</span>
           </div>
           <button
-            className="hamburger p-2 rounded-md text-white hover:bg-slate-700 transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation menu"
+            onClick={() => setIsOpen(false)}
+            className="p-2 rounded-lg text-[#5bc0be] hover:text-[#6fffe9] hover:bg-[#3a506b] transition-colors duration-200"
+            aria-label="Close navigation menu"
           >
-            {isOpen ? (
-              <AiOutlineClose className="h-6 w-6" />
-            ) : (
-              <AiOutlineMenu className="h-6 w-6" />
-            )}
+            <AiOutlineClose className="h-5 w-5" />
           </button>
-        </div>
-      </div>
-
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Sidebar - Only visible on desktop, slides in on mobile when open */}
-      <div key="sidebar" className={`
-        sidebar fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-slate-800 to-slate-900 text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:shadow-none
-      `}>
-        {/* Logo/Brand */}
-        <div className="flex items-center px-6 py-4 border-b border-slate-700">
-          <AiOutlinePhone className="h-7 w-7 text-blue-400" />
-          <span className="ml-2 text-lg font-semibold tracking-wide">AI Call Center</span>
         </div>
 
         {/* Navigation Links */}
@@ -148,17 +136,17 @@ function Navigation() {
                 className={`
                   flex items-center px-4 py-3 rounded-lg transition-all duration-200 group
                   ${isActive(item.href)
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-slate-300 hover:bg-slate-700 hover:text-white hover:shadow-md"
+                    ? "bg-[#5bc0be] text-[#0b132b] shadow-lg"
+                    : "text-[#5bc0be] hover:bg-[#3a506b] hover:text-[#6fffe9] hover:shadow-md"
                   }
                 `}
               >
                 <Icon className={`h-5 w-5 mr-3 transition-colors ${
-                  isActive(item.href) ? "text-white" : "text-slate-400 group-hover:text-white"
+                  isActive(item.href) ? "text-[#0b132b]" : "text-[#5bc0be] group-hover:text-[#6fffe9]"
                 }`} />
                 <span className="font-medium">{item.label}</span>
                 {isActive(item.href) && (
-                  <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                  <div className="ml-auto w-2 h-2 bg-[#0b132b] rounded-full"></div>
                 )}
               </Link>
             );
@@ -166,19 +154,19 @@ function Navigation() {
         </nav>
 
         {/* User Section */}
-        <div className="px-4 py-4 border-t border-slate-700">
-          <div className="flex items-center space-x-3 px-4 py-3 rounded-lg bg-slate-700/50 mb-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <AiOutlineUser className="h-4 w-4 text-white" />
+        <div className="px-4 py-4 border-t border-[#3a506b]">
+          <div className="flex items-center space-x-3 px-4 py-3 rounded-lg bg-[#3a506b]/50 mb-3">
+            <div className="w-8 h-8 bg-[#5bc0be] rounded-full flex items-center justify-center">
+              <AiOutlineUser className="h-4 w-4 text-[#0b132b]" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">admin</p>
-              <p className="text-xs text-slate-400 truncate">Administrator</p>
+              <p className="text-sm font-medium text-[#6fffe9] truncate">admin</p>
+              <p className="text-xs text-[#5bc0be] truncate">Administrator</p>
             </div>
           </div>
           <Button
             variant="ghost"
-            className="w-full justify-start text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+            className="w-full justify-start text-[#5bc0be] hover:bg-[#3a506b] hover:text-[#6fffe9] transition-colors"
             onClick={logout}
           >
             <AiOutlineLogout className="h-4 w-4 mr-3" />
@@ -186,9 +174,6 @@ function Navigation() {
           </Button>
         </div>
       </div>
-
-      {/* Main content spacer for desktop */}
-      <div className="hidden lg:block w-64 flex-shrink-0" />
     </div>
   );
 }

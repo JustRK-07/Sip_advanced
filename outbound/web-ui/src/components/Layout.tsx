@@ -15,10 +15,10 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex">
+    <div className="min-h-screen bg-[#0b132b] overflow-x-hidden">
       <Navigation key="main-navigation" />
-      {/* Main content area - padding top for mobile header, no margin left on desktop */}
-      <main className="flex-1 lg:ml-0 pt-16 lg:pt-0">
+      {/* Main content area with proper ID and spacing */}
+      <main id="main-content" className="w-full min-h-screen bg-[#0b132b]">
         {children}
       </main>
     </div>

@@ -101,7 +101,7 @@ export default function Dashboard() {
         <title>Campaign Dashboard</title>
         <meta name="description" content="Campaign Management Dashboard" />
       </Head>
-      <main className="container mx-auto p-6">
+      <div className="container mx-auto">
         {/* Professional Dashboard Header */}
         <div className="mb-8">
           <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 rounded-2xl p-8 text-white shadow-2xl">
@@ -109,11 +109,11 @@ export default function Dashboard() {
               <div>
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                    <BarChart3 className="h-6 w-6 text-blue-300" />
+                    <BarChart3 className="h-6 w-6 text-[#5bc0be]" />
                   </div>
                   <div>
                     <h1 className="text-3xl font-bold">Campaign Dashboard</h1>
-                    <p className="text-blue-100 mt-1">Real-time performance monitoring & analytics</p>
+                    <p className="text-[#6fffe9] mt-1">Real-time performance monitoring & analytics</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-6 mt-4">
@@ -121,7 +121,7 @@ export default function Dashboard() {
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span className="text-sm text-green-200">System Online</span>
                   </div>
-                  <div className="text-sm text-blue-200">
+                  <div className="text-sm text-[#5bc0be]">
                     Last updated: {new Date().toLocaleTimeString()}
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900">Active Campaigns</h3>
                   <Link href="/campaigns">
-                    <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
+                    <Button variant="outline" className="text-[#5bc0be] border-[#3a506b] hover:bg-[#1c2541]">
                       View All
                     </Button>
                   </Link>
@@ -196,7 +196,7 @@ export default function Dashboard() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <Link href="/campaigns">
-                              <Button variant="outline" size="sm" className="text-blue-600 border-blue-200 hover:bg-blue-50 h-7 px-2 text-xs">
+                              <Button variant="outline" size="sm" className="text-[#5bc0be] border-[#3a506b] hover:bg-[#1c2541] h-7 px-2 text-xs">
                                 <AiOutlineEdit className="h-3 w-3 mr-1" />
                                 Edit
                               </Button>
@@ -282,7 +282,7 @@ export default function Dashboard() {
               </div>
               
               <Link href="/number-management">
-                <Button variant="outline" className="w-full text-blue-600 border-blue-200 hover:bg-blue-50">
+                <Button variant="outline" className="w-full text-[#5bc0be] border-[#3a506b] hover:bg-[#1c2541]">
                   <AiOutlineEye className="h-4 w-4 mr-2" />
                   View All Numbers
                 </Button>
@@ -346,7 +346,7 @@ export default function Dashboard() {
             </div>
           </div>
         )}
-      </main>
+      </div>
     </>
   );
 }

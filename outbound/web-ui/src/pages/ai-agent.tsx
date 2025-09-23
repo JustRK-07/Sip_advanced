@@ -416,7 +416,7 @@ export default function AIAgent() {
         <title>AI Agent Control</title>
         <meta name="description" content="AI Agent Management and Control" />
       </Head>
-      <main className="container mx-auto p-6">
+      <div className="container mx-auto">
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex justify-between items-start">
@@ -890,7 +890,7 @@ export default function AIAgent() {
             </div>
           </DialogContent>
         </Dialog>
-      </main>
+      </div>
     </>
   );
 }

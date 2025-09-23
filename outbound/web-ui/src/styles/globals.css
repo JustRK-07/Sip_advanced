@@ -47,71 +47,71 @@
 
 :root {
 	--radius: 0.625rem;
-	--background: oklch(1 0 0);
-	--foreground: oklch(0.145 0 0);
-	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.145 0 0);
-	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.145 0 0);
-	--primary: oklch(0.205 0 0);
-	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.97 0 0);
-	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.97 0 0);
-	--muted-foreground: oklch(0.556 0 0);
-	--accent: oklch(0.97 0 0);
-	--accent-foreground: oklch(0.205 0 0);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.922 0 0);
-	--input: oklch(0.922 0 0);
-	--ring: oklch(0.708 0 0);
-	--chart-1: oklch(0.646 0.222 41.116);
-	--chart-2: oklch(0.6 0.118 184.704);
-	--chart-3: oklch(0.398 0.07 227.392);
-	--chart-4: oklch(0.828 0.189 84.429);
-	--chart-5: oklch(0.769 0.188 70.08);
-	--sidebar: oklch(0.985 0 0);
-	--sidebar-foreground: oklch(0.145 0 0);
-	--sidebar-primary: oklch(0.205 0 0);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.97 0 0);
-	--sidebar-accent-foreground: oklch(0.205 0 0);
-	--sidebar-border: oklch(0.922 0 0);
-	--sidebar-ring: oklch(0.708 0 0);
+	--background: #0b132b;
+	--foreground: #6fffe9;
+	--card: #1c2541;
+	--card-foreground: #6fffe9;
+	--popover: #1c2541;
+	--popover-foreground: #6fffe9;
+	--primary: #5bc0be;
+	--primary-foreground: #0b132b;
+	--secondary: #3a506b;
+	--secondary-foreground: #6fffe9;
+	--muted: #3a506b;
+	--muted-foreground: #5bc0be;
+	--accent: #5bc0be;
+	--accent-foreground: #0b132b;
+	--destructive: #ef4444;
+	--border: #3a506b;
+	--input: #3a506b;
+	--ring: #5bc0be;
+	--chart-1: #5bc0be;
+	--chart-2: #6fffe9;
+	--chart-3: #3a506b;
+	--chart-4: #1c2541;
+	--chart-5: #0b132b;
+	--sidebar: #1c2541;
+	--sidebar-foreground: #6fffe9;
+	--sidebar-primary: #5bc0be;
+	--sidebar-primary-foreground: #0b132b;
+	--sidebar-accent: #3a506b;
+	--sidebar-accent-foreground: #6fffe9;
+	--sidebar-border: #3a506b;
+	--sidebar-ring: #5bc0be;
 }
 
 .dark {
-	--background: oklch(0.145 0 0);
-	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.205 0 0);
-	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.205 0 0);
-	--popover-foreground: oklch(0.985 0 0);
-	--primary: oklch(0.922 0 0);
-	--primary-foreground: oklch(0.205 0 0);
-	--secondary: oklch(0.269 0 0);
-	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.269 0 0);
-	--muted-foreground: oklch(0.708 0 0);
-	--accent: oklch(0.269 0 0);
-	--accent-foreground: oklch(0.985 0 0);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(1 0 0 / 10%);
-	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.556 0 0);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.205 0 0);
-	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.488 0.243 264.376);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.269 0 0);
-	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.556 0 0);
+	--background: #0b132b;
+	--foreground: #6fffe9;
+	--card: #1c2541;
+	--card-foreground: #6fffe9;
+	--popover: #1c2541;
+	--popover-foreground: #6fffe9;
+	--primary: #5bc0be;
+	--primary-foreground: #0b132b;
+	--secondary: #3a506b;
+	--secondary-foreground: #6fffe9;
+	--muted: #3a506b;
+	--muted-foreground: #5bc0be;
+	--accent: #5bc0be;
+	--accent-foreground: #0b132b;
+	--destructive: #ef4444;
+	--border: #3a506b;
+	--input: #3a506b;
+	--ring: #5bc0be;
+	--chart-1: #5bc0be;
+	--chart-2: #6fffe9;
+	--chart-3: #3a506b;
+	--chart-4: #1c2541;
+	--chart-5: #0b132b;
+	--sidebar: #1c2541;
+	--sidebar-foreground: #6fffe9;
+	--sidebar-primary: #5bc0be;
+	--sidebar-primary-foreground: #0b132b;
+	--sidebar-accent: #3a506b;
+	--sidebar-accent-foreground: #6fffe9;
+	--sidebar-border: #3a506b;
+	--sidebar-ring: #5bc0be;
 }
 
 @layer base {
@@ -122,3 +122,103 @@
     @apply bg-background text-foreground;
 	}
 }
+
+/* Navbar sliding styles */
+.navbar {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  height: 100vh;
+  width: 250px;
+  background: linear-gradient(to bottom, #1c2541, #0b132b);
+  color: #6fffe9;
+  box-shadow: 0 25px 50px -12px rgba(11, 19, 43, 0.5);
+  z-index: 50;
+  transition: left 0.3s ease-in-out;
+}
+
+.navbar.active {
+  left: 0;
+}
+
+/* Toggle button styles */
+#toggleBtn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+  padding: 0.75rem;
+  background-color: #1c2541;
+  color: #6fffe9;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(11, 19, 43, 0.3), 0 4px 6px -2px rgba(11, 19, 43, 0.1);
+  transition: background-color 0.2s ease-in-out;
+}
+
+#toggleBtn:hover {
+  background-color: #3a506b;
+}
+
+/* Main content container styles */
+#main-content {
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+}
+
+/* When navbar is expanded, adjust main content margin */
+#main-content.navbar-expanded {
+  margin-left: 250px !important;
+  width: calc(100% - 250px) !important;
+  padding: 1rem !important;
+  position: relative !important;
+  z-index: 1 !important;
+  background-color: #0b132b !important;
+  min-height: 100vh !important;
+}
+
+/* Responsive design for screens smaller than 768px */
+@media (max-width: 768px) {
+  .navbar {
+    width: 200px;
+    left: -200px;
+  }
+  
+  #main-content.navbar-expanded {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+  
+  #toggleBtn {
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Ensure no horizontal scrolling */
+body {
+  overflow-x: hidden;
+}
+
+/* Debug and ensure content visibility */
+#main-content {
+  background-color: #0b132b !important;
+  min-height: 100vh;
+}
+
+#main-content.navbar-expanded {
+  background-color: #0b132b !important;
+  min-height: 100vh;
+}
+
+/* Ensure content is always visible */
+#main-content * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
